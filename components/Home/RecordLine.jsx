@@ -1,3 +1,4 @@
+import { format } from "date-fns";
 import React from "react";
 import { View, Text, Pressable } from "react-native";
 
@@ -12,8 +13,12 @@ export default function RecordLine(props) {
           style={{
             marginHorizontal: "1%",
             height: 80,
-            backgroundColor: props.color,
+            //backgroundColor: props.color,
             borderRadius: 5,
+            borderLeftWidth: 6,
+            borderColor: props.color,
+            borderBottomWidth: 1,
+            borderRightWidth: 1,
           }}
         >
           <View
@@ -52,7 +57,7 @@ export default function RecordLine(props) {
                   marginTop: "10%",
                 }}
               >
-                {props.dati.data}
+                {format(new Date(props.dati.data), "EEEE d")}
               </Text>
             </View>
           </View>

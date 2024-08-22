@@ -1,5 +1,6 @@
 import React from "react";
 import { View, Text } from "react-native";
+import { primary } from "../utils/Colors";
 
 export default function StatLine(props) {
   const bar = () => {
@@ -44,7 +45,7 @@ export default function StatLine(props) {
             borderWidth: 0.1,
             borderColor: "black",
             borderRadius: 10,
-            backgroundColor: "#fff",
+            backgroundColor: "rgb(0, 0, 0, 0)",
             flexDirection: "row",
           }}
         >
@@ -53,13 +54,19 @@ export default function StatLine(props) {
               style={{
                 width: bar(),
                 height: 20,
-                backgroundColor: "#e9967a",
-                borderRadius: 10,
+                backgroundColor: primary,
+                borderRadius: bar(),
               }}
-            ></View>
+            />
           </View>
           <Text
-            style={{ fontSize: 16, margin: 0, position: "absolute", right: 40 }}
+            style={{
+              fontSize: 16,
+              margin: 0,
+              position: "absolute",
+              right: 30,
+              color: "white",
+            }}
           >
             {bar()}%
           </Text>

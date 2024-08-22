@@ -7,87 +7,48 @@ import {
   FlatList,
   Image,
   Pressable,
-  ImageBackground,
+  ActivityIndicator,
 } from "react-native";
 import RecordLine from "./RecordLine";
-import ComunicationController from "./Model/ComunicationController";
+import ComunicationController from "../Model/ComunicationController";
 import StatLine from "./StatLine";
 import Detail from "./Detail";
 import { differenceInDays } from "date-fns";
-import Message from "./Message";
-import background1 from "./../img/vecteezy_gym-interior-with-people-doing-sport-exercises_13961888_440/background1.jpeg";
-import { useBimester } from "././Model/BimesterContext";
-import barChart from "./../img/bar-chart.png";
-import list from "./../img/list.png";
-import { DATE_BIMESTER } from "./utils/Date-Bimester";
+import { useMonth } from "../Model/MonthContext";
+import barChart from "../../img/bar-chart.png";
+import list from "../../img/list.png";
+import { primary } from "../utils/Colors";
+import HomeStats from "./HomeStats";
 
 const ListaAllenamenti = () => {
-  const { bimester } = useBimester();
-  const [corsiCol, setCorsiCol] = useState(new Map());
+  const { month } = useMonth();
+  //const splash_logo = Image.resolveAssetSource(GYMZ_logo_splash).uri;
+  const [courses, setCourses] = useState([]);
   const [Record, setRecord] = useState({ corso: "x" });
   const [detail, setDetail] = useState(false);
-  const bgColors = [
-    "aliceblue",
-    "bisque",
-    "beige",
-    "honeydew",
-    "lavender",
-    "lemonchiffon",
-    "lavenderblush",
-    "lightcyan",
-    "mistyrose",
-    "peachpuff",
-    "paleturquoise",
-    "palegoldenrod",
-    "mintcream",
-  ];
   const [Records, setRecords] = useState([]);
   const [fetching, setFetching] = useState(false);
   const [loading, setLoading] = useState(false);
   const [CourseCounts, setCourseCounts] = useState([]);
   const [stats, setStats] = useState(false);
-  const [dots, setDots] = useState("");
   const [weekPresence, setWeekPresence] = useState();
 
   useEffect(() => {
     getRecords();
-    const interval = setInterval(() => {
-      setDots((prevDots) => (prevDots === "..." ? "" : prevDots + "."));
-    }, 500);
-    return () => clearInterval(interval);
-  }, [bimester]);
+  }, [month]);
 
   useEffect(() => {
     calculateWeekPresence();
   }, [Records]);
 
-  const getBimesterBeginning = (m, y) => {
-    switch (m) {
-      case 0:
-        return new Date(y, 0, 1);
-      case 1:
-        return new Date(y, 0, 1);
-      case 2:
-        return new Date(y, 2, 1);
-      case 3:
-        return new Date(y, 2, 1);
-      case 4:
-        return new Date(y, 4, 1);
-      case 5:
-        return new Date(y, 4, 1);
-      case 6:
-        return new Date(y, 6, 1);
-      case 7:
-        return new Date(y, 6, 1);
-      case 8:
-        return new Date(y, 8, 1);
-      case 9:
-        return new Date(y, 8, 1);
-      case 10:
-        return new Date(y, 10, 1);
-      case 11:
-        return new Date(y, 10, 1);
-    }
+  useEffect(() => {
+    getCourses();
+  }, []);
+
+  const getCourses = async () => {
+    const endpoint = "action/find";
+    let req = await ComunicationController.serverReq(endpoint, "courses", {});
+    setCourses(req.documents[0].courses);
   };
 
   const getRecords = async () => {
@@ -96,9 +57,13 @@ const ListaAllenamenti = () => {
     setCourseCounts([]);
     const endpoint = "action/find";
     const parameters = {
-      filter: { [bimester.value]: { $exists: true } },
+      filter: { [month.value]: { $exists: true } },
     };
-    let req = await ComunicationController.serverReq(endpoint, parameters);
+    let req = await ComunicationController.serverReq(
+      endpoint,
+      "workoutMonths",
+      parameters
+    );
     setRecords([]);
     setCourseCounts([]);
     if (req.error || req.documents.length === 0) {
@@ -106,13 +71,12 @@ const ListaAllenamenti = () => {
       calculateWeekPresence(req);
       return;
     }
-    const bimesterData = req.documents[0][bimester.value];
-    bimesterData.sort((a, b) => new Date(a.data) - new Date(b.data));
-    bimesterData.forEach((el) => {
+    const workoutData = req.documents[0][month.value];
+    workoutData.sort((a, b) => new Date(a.data) - new Date(b.data));
+    workoutData.forEach((el) => {
       setRecords((prevState) => [el, ...prevState]);
-      courseColoring(el.corso);
     });
-    setCourseCounts(courseCounting(bimesterData));
+    setCourseCounts(courseCounting(workoutData));
     setFetching(false);
     setLoading(false);
   };
@@ -135,130 +99,48 @@ const ListaAllenamenti = () => {
     return resultArray;
   }
 
-  const courseColoring = (c) => {
-    if (!corsiCol.has(c)) {
-      let associableColor = Math.floor(Math.random() * bgColors.length);
-      let values = [...corsiCol.values()];
-      while (values.includes(associableColor)) {
-        associableColor = Math.floor(Math.random() * bgColors.length);
-      }
-      setCorsiCol(corsiCol.set(c, associableColor));
-    }
-  };
-
   const calculateWeekPresence = () => {
     const currentDate = new Date();
-    if (
-      (bimester.label === "mag/giu" && bimester.value === "2023-3") ||
-      (bimester.label === "lug/ago" && bimester.value === "2023-4")
-    ) {
-      setWeekPresence(Records.length / 6);
-    } else if (DATE_BIMESTER[currentDate.getMonth()] === bimester.label) {
-      let bb = getBimesterBeginning(
+    if (month.value === "2023-05" || month.label === "ago") {
+      setWeekPresence(Records.length / 2);
+    } else if (currentDate.toISOString().toString() === month.value) {
+      const monthBeginnigDate = new Date(
+        currentDate.getFullYear(),
         currentDate.getMonth(),
-        currentDate.getFullYear()
+        1
       );
-      const daysDifference = differenceInDays(currentDate, bb);
+      const daysDifference = differenceInDays(currentDate, monthBeginnigDate);
       const weeksDifference = daysDifference < 7 ? 0 : daysDifference / 7;
       setWeekPresence(
         weeksDifference > 0 ? Records.length / weeksDifference : Records.length
       );
     } else {
-      setWeekPresence(Records.length / 8);
+      setWeekPresence(Records.length / 4);
     }
   };
 
-  function roundDec(n) {
-    const r = Math.round(n * 10) / 10;
-    return r % 1 === 0 ? r.toFixed(0) : r.toFixed(1);
-  }
-
   if (loading) {
     return (
-      <ImageBackground source={background1}>
-        <View
-          style={{
-            height: "100%",
-            padding: 65,
-          }}
-        >
-          <Text
-            style={{
-              fontSize: 34,
-              color: "#5d2867",
-              fontWeight: "900",
-            }}
-          >
-            Loading{dots}
-          </Text>
-        </View>
-      </ImageBackground>
+      <View
+        style={{
+          height: "100%",
+          padding: 65,
+          alignItems: "center",
+          justifyContent: "center",
+          gap: 16,
+        }}
+      >
+        <Image
+          source={require("../../assets/GYMZ_logo_splash.png")}
+          style={[{ width: 175, height: 175 }]}
+        />
+        <ActivityIndicator size="large" color={primary} />
+      </View>
     );
   } else {
     return (
       <View style={styles.container}>
-        <View
-          style={{
-            flex: 2,
-            backgroundColor:
-              Records.length < 4
-                ? "lightgray"
-                : weekPresence < 2
-                ? "#ffa3a3"
-                : weekPresence < 3
-                ? "#ffff00"
-                : weekPresence < 4
-                ? "#b3ffb9"
-                : "gold",
-            alignItems: "center",
-            justifyContent: "center",
-            margin: 12,
-            marginBottom: 18,
-            borderRadius: 20,
-            elevation: 0.9,
-            shadowOpacity: 100,
-            shadowRadius: 0.5,
-            shadowOffset: { width: 15, height: 22 },
-          }}
-        >
-          <View
-            style={{
-              display: "flex",
-              flexDirection: "column",
-
-              justifyContent: "space-around",
-              alignItems: "center",
-            }}
-          >
-            <View style={{ flex: 1 }}>
-              <Text
-                style={{
-                  fontSize: 20,
-                  fontWeight: "700",
-                  marginTop: 10,
-                  textAlign: "center",
-                }}
-              >
-                Presenze del bimestre: {Records.length}
-              </Text>
-            </View>
-            <View style={{ flex: 1 }}>
-              <Text
-                style={{
-                  fontSize: 20,
-                  fontWeight: "700",
-                  textAlign: "center",
-                }}
-              >
-                Presenze settimanali:{" "}
-                {Records.length > 3 ? roundDec(weekPresence) : "NC"}
-              </Text>
-            </View>
-            <View style={{ flex: 1 }}>
-              <Message frequency={weekPresence} presence={Records.length} />
-            </View>
-          </View>
-        </View>
+        <HomeStats Records={Records} weekPresence={weekPresence} />
         <View
           style={{
             flex: 0.75,
@@ -281,9 +163,9 @@ const ListaAllenamenti = () => {
               style={{
                 borderTopEndRadius: 10,
                 borderTopStartRadius: 10,
-                width: "90%",
+                width: "95%",
                 height: "100%",
-                backgroundColor: !stats ? "lightsteelblue" : "whitesmoke",
+                backgroundColor: !stats ? primary : "whitesmoke",
                 margin: 5,
                 alignItems: "center",
                 justifyContent: "center",
@@ -305,7 +187,7 @@ const ListaAllenamenti = () => {
                 borderTopStartRadius: 10,
                 width: "90%",
                 height: "100%",
-                backgroundColor: stats ? "lightsteelblue" : "whitesmoke",
+                backgroundColor: stats ? primary : "whitesmoke",
                 margin: 5,
                 alignItems: "center",
                 justifyContent: "center",
@@ -350,7 +232,9 @@ const ListaAllenamenti = () => {
                 >
                   <Detail
                     dati={Record}
-                    color={bgColors[corsiCol.get(Record.corso)]}
+                    color={
+                      courses.find((e) => e.course === Record.corso)?.color
+                    }
                     handlePress={() => setDetail(false)}
                   />
                 </View>
@@ -361,7 +245,9 @@ const ListaAllenamenti = () => {
                 renderItem={({ item }) => {
                   return (
                     <RecordLine
-                      color={bgColors[corsiCol.get(item.corso)]}
+                      color={
+                        courses.find((e) => e.course === item.corso)?.color
+                      }
                       dati={item}
                       onDelete={() => deleteLocalRecord(item)}
                       onDetail={() => (setDetail(true), setRecord(item))}
@@ -406,7 +292,7 @@ const styles = StyleSheet.create({
     flex: 6,
   },
   statsStyle: {
-    backgroundColor: "#fffafa",
+    //backgroundColor: "#fffafa",
     paddingHorizontal: 25,
     borderColor: "#c0c0c0",
   },

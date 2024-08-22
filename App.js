@@ -1,28 +1,27 @@
 import React, { useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
-import ListaAllenamenti from "./components/ListaAllenamenti";
+import ListaAllenamenti from "./components/Home/ListaAllenamenti";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Ionicons } from "@expo/vector-icons";
 import AggiungiWorkout from "./components/AggiungiWorkout";
-import { Image, View, Text, Modal } from "react-native";
-import workout from "./img/work-out.png";
-import kettlebell from "./img/kettlebell.png";
-import { BimesterProvider } from "./components/Model/BimesterContext";
-import SelectBim from "./components/SelectBim";
-import { Chip, lightColors } from "@rneui/themed";
-import { useBimester } from "./components/Model/BimesterContext";
+import { View, Text, Modal, Pressable } from "react-native";
+import { MonthProvider, useMonth } from "./components/Model/MonthContext";
+import SelectMonth from "./components/SelectMonth";
+import { Chip } from "@rneui/themed";
+import { primary } from "./components/utils/Colors";
 
 const App = () => {
   return (
-    <BimesterProvider>
+    <MonthProvider>
       <AppContent />
-    </BimesterProvider>
+    </MonthProvider>
   );
 };
 
 const AppContent = () => {
-  const [showBim, setShowBim] = useState(false);
-  const { bimester } = useBimester();
+  const [showCalendar, setShowCalendar] = useState(false);
+  const { month } = useMonth();
+
   return (
     <NavigationContainer>
       <Tab.Navigator screenOptions={setIcons}>
@@ -31,36 +30,38 @@ const AppContent = () => {
             headerTitle: () => (
               <View
                 style={{
+                  width: "100%",
                   display: "flex",
                   flexDirection: "row",
                   alignItems: "center",
                   justifyContent: "space-between",
                 }}
               >
-                <Text style={{ fontSize: 24, fontWeight: 700 }}>
-                  Allenamenti
-                </Text>
-                <Image source={workout} style={{ width: 58, height: 58 }} />
-                <Chip
-                  title={`${bimester.label} ${bimester.value.split("-")[0]}`}
-                  iconPosition="right"
-                  icon={{
-                    name: "calendar",
-                    type: "font-awesome",
-                    size: 20,
-                    color: lightColors.primary,
-                  }}
-                  onPress={() => setShowBim(true)}
-                  type="outline"
-                  containerStyle={{ marginLeft: 8 }}
-                />
-                {/* <Pressable onPress={() => setShowBim(true)}>
-                    <Image
-                      source={calendar}
-                      style={{ width: 45, height: 45, marginLeft: 40 }}
-                    />
-                  </Pressable> */}
-                {showBim && (
+                <View>
+                  <Text
+                    style={{ fontSize: 24, fontWeight: 700, color: primary }}
+                  >
+                    Allenamenti
+                  </Text>
+                </View>
+                <View>
+                  <Chip
+                    color={primary}
+                    title={`${month.label[0].toUpperCase()}${month.label
+                      .substring(1, 3)
+                      .toLowerCase()} ${month.value.split("-")[0]} `}
+                    iconPosition="right"
+                    icon={{
+                      name: "calendar",
+                      type: "font-awesome",
+                      size: 20,
+                      color: "white",
+                    }}
+                    onPress={() => setShowCalendar(true)}
+                    //type="outline"
+                  />
+                </View>
+                {showCalendar && (
                   <Modal
                     animationType="fade"
                     transparent={true}
@@ -69,13 +70,36 @@ const AppContent = () => {
                   >
                     <View
                       style={{
-                        flex: 1,
                         justifyContent: "center",
                         alignItems: "center",
                         backgroundColor: "whitesmoke",
+                        flex: 6,
                       }}
                     >
-                      <SelectBim select={() => setShowBim(false)} />
+                      <SelectMonth select={() => setShowCalendar(false)} />
+                    </View>
+                    <View
+                      style={{
+                        justifyContent: "center",
+                        alignItems: "center",
+                        backgroundColor: "whitesmoke",
+                        flex: 1,
+                      }}
+                    >
+                      <Pressable onPress={() => setShowCalendar(false)}>
+                        <View
+                          style={{
+                            width: 48,
+                            height: 48,
+                            backgroundColor: "white",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            borderRadius: 48,
+                          }}
+                        >
+                          <Ionicons name="close-outline" size={32} />
+                        </View>
+                      </Pressable>
                     </View>
                   </Modal>
                 )}
@@ -98,7 +122,6 @@ const AppContent = () => {
                 <Text style={{ fontSize: 24, fontWeight: 700 }}>
                   Aggiungi workout
                 </Text>
-                <Image source={kettlebell} style={{ width: 58, height: 58 }} />
               </View>
             ),
           }}
@@ -109,8 +132,6 @@ const AppContent = () => {
     </NavigationContainer>
   );
 };
-
-/* const { bimester, updateBimester } = useBimester(); */
 
 const Tab = createBottomTabNavigator();
 
@@ -124,8 +145,8 @@ const setIcons = ({ route }) => ({
     }
     return <Ionicons name={iconName} size={size} color={color} />;
   },
-  tabBarActiveTintColor: "#ff5c69",
-  tabBarInactiveTintColor: "gray",
+  tabBarActiveTintColor: primary,
+  tabBarInactiveTintColor: "grey",
 });
 
 export default App;

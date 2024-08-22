@@ -5,10 +5,10 @@
     "slug": "Gymz",
     "version": "1.76",
     "orientation": "portrait",
-    "icon": "./assets/el.png",
+    "icon": "./img/GYMZ_app_logo.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/background1.png",
+      "image": "./img/GYMZ_logo_splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
