@@ -1,12 +1,12 @@
 import React from "react";
 import { View, Text } from "react-native";
 import { primary } from "../utils/Colors";
+import { LinearProgress } from "@rneui/themed";
 
 export default function StatLine(props) {
-  const bar = () => {
-    return Math.floor((props.dati.num * 100) / props.total);
+  const bar = (): number => {
+    return Math.round((props.dati.num * 100) / props.total) / 100;
   };
-
   return (
     <View
       style={{
@@ -38,39 +38,29 @@ export default function StatLine(props) {
           flexDirection: "row",
         }}
       >
-        <View
+        <LinearProgress
           style={{
-            width: 100,
+            width: 150,
+            marginVertical: 10,
             height: 20,
-            borderWidth: 0.1,
-            borderColor: "black",
             borderRadius: 10,
-            backgroundColor: "rgb(0, 0, 0, 0)",
-            flexDirection: "row",
+            position: "relative",
+          }}
+          color={primary}
+          value={bar()}
+        />
+        <Text
+          style={{
+            margin: "auto",
+            fontSize: 16,
+            position: "absolute",
+            right: 62,
+            top: 8,
+            color: "white",
           }}
         >
-          <View>
-            <View
-              style={{
-                width: bar(),
-                height: 20,
-                backgroundColor: primary,
-                borderRadius: bar(),
-              }}
-            />
-          </View>
-          <Text
-            style={{
-              fontSize: 16,
-              margin: 0,
-              position: "absolute",
-              right: 30,
-              color: "white",
-            }}
-          >
-            {bar()}%
-          </Text>
-        </View>
+          {`${Math.floor(bar() * 100)}%`}
+        </Text>
       </View>
     </View>
   );

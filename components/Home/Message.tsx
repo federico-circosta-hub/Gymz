@@ -1,5 +1,5 @@
-import React from "react";
-import { View, Text, Image } from "react-native";
+import React, { useEffect, useRef } from "react";
+import { View, Text, Image, Animated } from "react-native";
 import warning from "../../img/warning.png";
 import verified from "../../img/checked.png";
 import death from "../../img/death.png";
@@ -7,7 +7,18 @@ import comic from "../../img/comic.png";
 import run from "../../img/running-man.png";
 import ControlledTooltip from "../utils/Components/ControlledTooltip";
 
-export default function Message(props) {
+const Message = (props) => {
+  const sizeAnim = useRef(new Animated.Value(30)).current;
+
+  useEffect(() => {
+    let toValue = 75;
+    Animated.timing(sizeAnim, {
+      toValue,
+      duration: 800,
+      useNativeDriver: false,
+    }).start();
+  }, [sizeAnim]);
+
   if (props.presence < 4) {
     return (
       <ControlledTooltip
@@ -15,11 +26,11 @@ export default function Message(props) {
         backgroundColor={"lightgray"}
         popover={<Text>{"Che aspetti?\nCorri in palestra!"}</Text>}
       >
-        <View
+        <Animated.View
           style={{
             backgroundColor: "lightgray",
-            width: 70,
-            height: 70,
+            width: sizeAnim,
+            height: sizeAnim,
             display: "flex",
             flexDirection: "row",
             justifyContent: "center",
@@ -30,7 +41,7 @@ export default function Message(props) {
           <View>
             <Image source={run} style={{ width: 35, height: 35 }} />
           </View>
-        </View>
+        </Animated.View>
       </ControlledTooltip>
     );
   } else if (props.frequency >= 4 && props.presence > 3) {
@@ -40,11 +51,11 @@ export default function Message(props) {
         backgroundColor={"gold"}
         popover={<Text>{"Pazzesco,\nmedia settimanale super!"}</Text>}
       >
-        <View
+        <Animated.View
           style={{
             backgroundColor: "gold",
-            width: 70,
-            height: 70,
+            width: sizeAnim,
+            height: sizeAnim,
             display: "flex",
             flexDirection: "row",
             justifyContent: "center",
@@ -64,7 +75,7 @@ export default function Message(props) {
               <Image source={comic} style={{ width: 35, height: 35 }} />
             </View>
           </View>
-        </View>
+        </Animated.View>
       </ControlledTooltip>
     );
   } else if (
@@ -78,11 +89,11 @@ export default function Message(props) {
         backgroundColor={"#b3ffb9"}
         popover={<Text>{"Complimenti,\nbuona media settimanale!"}</Text>}
       >
-        <View
+        <Animated.View
           style={{
             backgroundColor: "#b3ffb9",
-            width: 70,
-            height: 70,
+            width: sizeAnim,
+            height: sizeAnim,
             display: "flex",
             flexDirection: "row",
             justifyContent: "center",
@@ -102,7 +113,7 @@ export default function Message(props) {
               <Image source={verified} style={{ width: 35, height: 35 }} />
             </View>
           </View>
-        </View>
+        </Animated.View>
       </ControlledTooltip>
     );
   } else if (
@@ -115,11 +126,11 @@ export default function Message(props) {
         backgroundColor={"#ffff00"}
         popover={<Text>Devi fare più di così!</Text>}
       >
-        <View
+        <Animated.View
           style={{
             backgroundColor: "#ffff00",
-            width: 70,
-            height: 70,
+            width: sizeAnim,
+            height: sizeAnim,
             display: "flex",
             flexDirection: "row",
             justifyContent: "center",
@@ -139,7 +150,7 @@ export default function Message(props) {
               <Image source={warning} style={{ width: 35, height: 35 }} />
             </View>
           </View>
-        </View>
+        </Animated.View>
       </ControlledTooltip>
     );
   } else {
@@ -149,11 +160,11 @@ export default function Message(props) {
         backgroundColor={"#ffa3a3"}
         popover={<Text>{"Attenzione,\nmedia settimanale insufficiente!"}</Text>}
       >
-        <View
+        <Animated.View
           style={{
             backgroundColor: "#ffa3a3",
-            width: 70,
-            height: 70,
+            width: sizeAnim,
+            height: sizeAnim,
             display: "flex",
             flexDirection: "row",
             justifyContent: "center",
@@ -173,8 +184,10 @@ export default function Message(props) {
               <Image source={death} style={{ width: 35, height: 35 }} />
             </View>
           </View>
-        </View>
+        </Animated.View>
       </ControlledTooltip>
     );
   }
-}
+};
+
+export default Message;

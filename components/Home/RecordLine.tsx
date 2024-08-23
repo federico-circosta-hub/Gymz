@@ -13,7 +13,6 @@ export default function RecordLine(props) {
           style={{
             marginHorizontal: "1%",
             height: 80,
-            //backgroundColor: props.color,
             borderRadius: 5,
             borderLeftWidth: 6,
             borderColor: props.color,
