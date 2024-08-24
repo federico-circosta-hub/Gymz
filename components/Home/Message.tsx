@@ -1,10 +1,5 @@
 import React, { useEffect, useRef } from "react";
 import { View, Text, Image, Animated } from "react-native";
-import warning from "../../img/warning.png";
-import verified from "../../img/checked.png";
-import death from "../../img/death.png";
-import comic from "../../img/comic.png";
-import run from "../../img/running-man.png";
 import ControlledTooltip from "../utils/Components/ControlledTooltip";
 
 const Message = (props) => {
@@ -39,7 +34,10 @@ const Message = (props) => {
           }}
         >
           <View>
-            <Image source={run} style={{ width: 35, height: 35 }} />
+            <Image
+              source={require("../../assets/running-man.png")}
+              style={{ width: 35, height: 35 }}
+            />
           </View>
         </Animated.View>
       </ControlledTooltip>
@@ -49,7 +47,7 @@ const Message = (props) => {
       <ControlledTooltip
         containerStyle={{ width: 200, height: 60 }}
         backgroundColor={"gold"}
-        popover={<Text>{"Pazzesco,\nmedia settimanale super!"}</Text>}
+        popover={<Text>{"Ottimo,\nsuper media settimanale!"}</Text>}
       >
         <Animated.View
           style={{
@@ -72,7 +70,10 @@ const Message = (props) => {
             }}
           >
             <View>
-              <Image source={comic} style={{ width: 35, height: 35 }} />
+              <Image
+                source={require("../../assets/comic.png")}
+                style={{ width: 35, height: 35 }}
+              />
             </View>
           </View>
         </Animated.View>
@@ -110,7 +111,10 @@ const Message = (props) => {
             }}
           >
             <View>
-              <Image source={verified} style={{ width: 35, height: 35 }} />
+              <Image
+                source={require("../../assets/checked.png")}
+                style={{ width: 35, height: 35 }}
+              />
             </View>
           </View>
         </Animated.View>
@@ -147,7 +151,10 @@ const Message = (props) => {
             }}
           >
             <View>
-              <Image source={warning} style={{ width: 35, height: 35 }} />
+              <Image
+                source={require("../../assets/warning.png")}
+                style={{ width: 35, height: 35 }}
+              />
             </View>
           </View>
         </Animated.View>
@@ -181,7 +188,10 @@ const Message = (props) => {
             }}
           >
             <View>
-              <Image source={death} style={{ width: 35, height: 35 }} />
+              <Image
+                source={require("../../assets/death.png")}
+                style={{ width: 35, height: 35 }}
+              />
             </View>
           </View>
         </Animated.View>

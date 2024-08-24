@@ -8,7 +8,10 @@
       "distribution": "internal"
     },
     "preview": {
-      "distribution": "internal"
+      "distribution": "internal",
+      "env": {
+        "EXPO_PUBLIC_API_KEY": "smlgwPdah4WFit6ODwD2gR0T5PkBsRsJ4NY3ufz4JJmWSmhptTj1WcompLUTSVff"
+      }
     },
     "production": {}
   },

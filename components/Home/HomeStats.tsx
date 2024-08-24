@@ -60,7 +60,7 @@ const HomeStats = ({ Records, weekPresence }) => {
               fontWeight: "400",
             }}
           >
-            Ingressi mese:{" "}
+            Totale workout:{" "}
           </Text>
           <Text
             style={{

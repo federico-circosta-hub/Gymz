@@ -22,7 +22,6 @@ export default class CommunicationController {
     });
     const status = httpResponse.status;
     console.log("parameters", parameters);
-    console.log("httpResponse", httpResponse);
     if (status !== 200) return { error: true };
 
     try {

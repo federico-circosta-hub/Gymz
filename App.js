@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import { NavigationContainer } from "@react-navigation/native";
 import ListaAllenamenti from "./components/Home/ListaAllenamenti";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Ionicons } from "@expo/vector-icons";
 import AggiungiWorkout from "./components/AggiungiWorkout";
 import { View, Text, Modal, Pressable } from "react-native";
 import { MonthProvider, useMonth } from "./components/Model/MonthContext";
 import SelectMonth from "./components/SelectMonth";
 import { Chip } from "@rneui/themed";
 import { primary } from "./components/utils/Colors";
+import Icon from "react-native-vector-icons/Ionicons";
 
 const App = () => {
   return (
@@ -41,25 +41,16 @@ const AppContent = () => {
                   <Text
                     style={{ fontSize: 24, fontWeight: 700, color: primary }}
                   >
-                    Allenamenti
+                    Workout del mese
                   </Text>
                 </View>
                 <View>
-                  <Chip
-                    color={primary}
-                    title={`${month.label[0].toUpperCase()}${month.label
+                  <Chip color={primary} onPress={() => setShowCalendar(true)}>
+                    <Icon name="calendar" color="white" size={22} />{" "}
+                    {`${month.label[0].toUpperCase()}${month.label
                       .substring(1, 3)
                       .toLowerCase()} ${month.value.split("-")[0]} `}
-                    iconPosition="right"
-                    icon={{
-                      name: "calendar",
-                      type: "font-awesome",
-                      size: 20,
-                      color: "white",
-                    }}
-                    onPress={() => setShowCalendar(true)}
-                    //type="outline"
-                  />
+                  </Chip>
                 </View>
                 {showCalendar && (
                   <Modal
@@ -97,7 +88,7 @@ const AppContent = () => {
                             borderRadius: 48,
                           }}
                         >
-                          <Ionicons name="close-outline" size={32} />
+                          <Icon name="close-outline" size={32} />
                         </View>
                       </Pressable>
                     </View>
@@ -119,7 +110,7 @@ const AppContent = () => {
                   alignItems: "center",
                 }}
               >
-                <Text style={{ fontSize: 24, fontWeight: 700 }}>
+                <Text style={{ fontSize: 24, fontWeight: 700, color: primary }}>
                   Aggiungi workout
                 </Text>
               </View>
@@ -136,17 +127,17 @@ const AppContent = () => {
 const Tab = createBottomTabNavigator();
 
 const setIcons = ({ route }) => ({
-  tabBarIcon: ({ focused, color, size }) => {
+  tabBarIcon: ({ color, size }) => {
     let iconName;
     if (route.name === "Home") {
-      iconName = focused ? "reader" : "reader-outline";
+      iconName = "home";
     } else if (route.name === "Aggiungi Workout") {
-      iconName = focused ? "barbell" : "barbell-outline";
+      iconName = "barbell";
     }
-    return <Ionicons name={iconName} size={size} color={color} />;
+    return <Icon name={iconName} size={size} color={color} />;
   },
   tabBarActiveTintColor: primary,
-  tabBarInactiveTintColor: "grey",
+  tabBarInactiveTintColor: "gray",
 });
 
 export default App;

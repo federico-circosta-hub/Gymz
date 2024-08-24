@@ -5,19 +5,19 @@ import { View, Text, Pressable } from "react-native";
 export default function RecordLine(props) {
   return (
     <View>
-      <Pressable
-        onLongPress={() => props.onDelete()}
-        onPress={() => props.onDetail()}
-      >
+      <Pressable onPress={() => props.onDetail()}>
         <View
           style={{
+            display: "flex",
+            flexDirection: "row",
             marginHorizontal: "1%",
-            height: 80,
+            height: 65,
             borderRadius: 5,
             borderLeftWidth: 6,
             borderColor: props.color,
             borderBottomWidth: 1,
             borderRightWidth: 1,
+            alignItems: "center",
           }}
         >
           <View
@@ -38,7 +38,6 @@ export default function RecordLine(props) {
                   fontSize: 20,
                   textAlign: "left",
                   marginLeft: 17,
-                  marginTop: "5%",
                 }}
               >
                 {props.dati.corso}
@@ -53,22 +52,12 @@ export default function RecordLine(props) {
                 style={{
                   textAlign: "right",
                   marginRight: 17,
-                  marginTop: "10%",
                 }}
               >
                 {format(new Date(props.dati.data), "EEEE d")}
               </Text>
             </View>
           </View>
-          <Text
-            style={{
-              fontWeight: "400",
-              fontSize: 16,
-              marginLeft: 17,
-            }}
-          >
-            {props.dati.istruttore}
-          </Text>
         </View>
       </Pressable>
     </View>

@@ -2,6 +2,17 @@ module.exports = function (api) {
   api.cache(true);
   return {
     presets: ["babel-preset-expo"],
-    plugins: ["nativewind/babel"],
+    /* overrides: [
+      {
+        plugins: [
+          [
+            "@babel/plugin-transform-private-methods",
+            {
+              loose: true,
+            },
+          ],
+        ],
+      },
+    ], */
   };
 };

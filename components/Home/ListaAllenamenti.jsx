@@ -5,9 +5,9 @@ import {
   Text,
   StyleSheet,
   FlatList,
-  Image,
   Pressable,
   ActivityIndicator,
+  Image,
 } from "react-native";
 import RecordLine from "./RecordLine";
 import ComunicationController from "../Model/ComunicationController";
@@ -15,14 +15,11 @@ import StatLine from "./StatLine";
 import Detail from "./Detail";
 import { differenceInDays } from "date-fns";
 import { useMonth } from "../Model/MonthContext";
-import barChart from "../../img/bar-chart.png";
-import list from "../../img/list.png";
 import { primary } from "../utils/Colors";
 import HomeStats from "./HomeStats";
 
 const ListaAllenamenti = () => {
   const { month } = useMonth();
-  //const splash_logo = Image.resolveAssetSource(GYMZ_logo_splash).uri;
   const [courses, setCourses] = useState([]);
   const [Record, setRecord] = useState({ corso: "x" });
   const [detail, setDetail] = useState(false);
@@ -172,7 +169,10 @@ const ListaAllenamenti = () => {
                 elevation: !stats ? 7.5 : 0,
               }}
             >
-              <Image source={list} style={{ width: 20, height: 20 }} />
+              <Image
+                source={require("../../assets/list.png")}
+                style={{ width: 20, height: 20 }}
+              />
             </View>
           </Pressable>
           <Pressable
@@ -194,7 +194,10 @@ const ListaAllenamenti = () => {
                 elevation: stats ? 7.5 : 0,
               }}
             >
-              <Image source={barChart} style={{ width: 20, height: 20 }} />
+              <Image
+                source={require("../../assets/bar-chart.png")}
+                style={{ width: 20, height: 20 }}
+              />
             </View>
           </Pressable>
         </View>
@@ -222,7 +225,6 @@ const ListaAllenamenti = () => {
                 }}
               >
                 <View
-                  on
                   style={{
                     flex: 1,
                     justifyContent: "center",
@@ -249,7 +251,7 @@ const ListaAllenamenti = () => {
                         courses.find((e) => e.course === item.corso)?.color
                       }
                       dati={item}
-                      onDelete={() => deleteLocalRecord(item)}
+                      //onDelete={() => deleteLocalRecord(item)}
                       onDetail={() => (setDetail(true), setRecord(item))}
                     />
                   );
