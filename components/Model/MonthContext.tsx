@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState } from "react";
+import { Month } from "./Types";
 
-const MonthContext = createContext();
+const MonthContext = createContext({});
 
 export const MonthProvider = ({ children }) => {
   const obtainCurrentMonth = () => {
@@ -36,7 +37,7 @@ export const MonthProvider = ({ children }) => {
   };
   const [month, setMonth] = useState(obtainCurrentMonth());
 
-  const updateMonth = (newMonth) => {
+  const updateMonth = (newMonth: Month) => {
     setMonth(newMonth);
   };
 

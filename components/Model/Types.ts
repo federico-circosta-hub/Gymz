@@ -5,3 +5,8 @@ export type Course = {
   power: number;
   color: string;
 };
+
+export type Month = {
+  label: string;
+  value: string;
+};

@@ -3,7 +3,11 @@ const apiKey = process.env.EXPO_PUBLIC_API_KEY;
 export default class CommunicationController {
   static BASE_URL =
     "https://eu-central-1.aws.data.mongodb-api.com/app/data-tinelxj/endpoint/data/v1/";
-  static async serverReq(endpoint, collection, parameters) {
+  static async serverReq(
+    endpoint: string,
+    collection: string,
+    parameters: object
+  ) {
     const url = this.BASE_URL + endpoint;
     let httpResponse = await fetch(url, {
       method: "POST",
