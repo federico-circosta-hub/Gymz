@@ -133,7 +133,7 @@ const AggiungiWorkout = () => {
 
           <View
             style={{
-              width: "90%",
+              width: "80%",
               display: "flex",
               flexDirection: "row",
               alignItems: "center",
