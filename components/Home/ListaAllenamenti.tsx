@@ -17,18 +17,24 @@ import { differenceInDays } from "date-fns";
 import { useMonth } from "../Model/MonthContext";
 import { primary } from "../utils/Colors";
 import HomeStats from "./HomeStats";
+import { Course, Month, Record } from "../Model/Types";
+
+type CourseCount = {
+  corso: string;
+  num: number;
+};
 
 const ListaAllenamenti = () => {
-  const { month } = useMonth();
-  const [courses, setCourses] = useState([]);
-  const [Record, setRecord] = useState({ corso: "x" });
-  const [detail, setDetail] = useState(false);
-  const [Records, setRecords] = useState([]);
-  const [fetching, setFetching] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [CourseCounts, setCourseCounts] = useState([]);
-  const [stats, setStats] = useState(false);
-  const [weekPresence, setWeekPresence] = useState();
+  const { month } = useMonth() as { month: Month };
+  const [courses, setCourses] = useState<Course[]>([]);
+  const [Record, setRecord] = useState<Record>();
+  const [detail, setDetail] = useState<boolean>(false);
+  const [Records, setRecords] = useState<Record[]>([]);
+  const [fetching, setFetching] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [CourseCounts, setCourseCounts] = useState<CourseCount[]>([]);
+  const [stats, setStats] = useState<boolean>(false);
+  const [weekPresence, setWeekPresence] = useState<number>();
 
   useEffect(() => {
     getRecords();
@@ -42,13 +48,13 @@ const ListaAllenamenti = () => {
     getCourses();
   }, []);
 
-  const getCourses = async () => {
+  const getCourses = async (): Promise<void> => {
     const endpoint = "action/find";
     let req = await ComunicationController.serverReq(endpoint, "courses", {});
     setCourses(req.documents[0].courses);
   };
 
-  const getRecords = async () => {
+  const getRecords = async (): Promise<void> => {
     setLoading(true);
     setRecords([]);
     setCourseCounts([]);
@@ -65,12 +71,15 @@ const ListaAllenamenti = () => {
     setCourseCounts([]);
     if (req.error || req.documents.length === 0) {
       setLoading(false);
-      calculateWeekPresence(req);
+      calculateWeekPresence();
       return;
     }
     const workoutData = req.documents[0][month.value];
-    workoutData.sort((a, b) => new Date(a.data) - new Date(b.data));
-    workoutData.forEach((el) => {
+    workoutData.sort(
+      (a: Record, b: Record) =>
+        new Date(a.data).getTime() - new Date(b.data).getTime()
+    );
+    workoutData.forEach((el: Record) => {
       setRecords((prevState) => [el, ...prevState]);
     });
     setCourseCounts(courseCounting(workoutData));
@@ -83,7 +92,7 @@ const ListaAllenamenti = () => {
     setCourseCounts([]);
   }
 
-  function courseCounting(arr) {
+  function courseCounting(arr: Record[]): CourseCount[] {
     const resultArray = [];
     const nameCountMap = new Map();
     for (const item of arr) {
@@ -235,14 +244,13 @@ const ListaAllenamenti = () => {
                   <Detail
                     dati={Record}
                     color={
-                      courses.find((e) => e.course === Record.corso)?.color
+                      courses.find((e) => e.course === Record?.corso)?.color
                     }
                     handlePress={() => setDetail(false)}
                   />
                 </View>
               </Modal>
               <FlatList
-                style={styles.listStyle}
                 data={Records}
                 renderItem={({ item }) => {
                   return (
@@ -294,7 +302,6 @@ const styles = StyleSheet.create({
     flex: 6,
   },
   statsStyle: {
-    //backgroundColor: "#fffafa",
     paddingHorizontal: 25,
     borderColor: "#c0c0c0",
   },

@@ -2,9 +2,10 @@ import { View, Text, FlatList } from "react-native";
 import { useMonth } from "./Model/MonthContext";
 import { primary, secondary } from "./utils/Colors";
 import { MonthArray } from "./utils/DateManipulation";
+import { MonthContextType } from "./Model/Types";
 
 const SelectMonth = (props) => {
-  const { month, updateMonth } = useMonth();
+  const { month, updateMonth } = useMonth() as MonthContextType;
 
   return (
     <FlatList
