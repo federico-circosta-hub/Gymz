@@ -1,8 +1,12 @@
 import React, { useEffect, useRef } from "react";
 import { View, Text, Image, Animated } from "react-native";
 import ControlledTooltip from "../utils/Components/ControlledTooltip";
+import { useMonth } from "../Model/MonthContext";
 
 const Message = (props) => {
+  const { month } = useMonth() as {
+    month: { label: string; value: string };
+  };
   const sizeAnim = useRef(new Animated.Value(30)).current;
 
   useEffect(() => {
@@ -14,7 +18,10 @@ const Message = (props) => {
     }).start();
   }, [sizeAnim]);
 
-  if (props.presence < 4) {
+  if (
+    props.presence < 4 &&
+    Number(month.value.substring(5, 7)) - 1 === new Date().getMonth()
+  ) {
     return (
       <ControlledTooltip
         containerStyle={{ width: 150, height: 60 }}

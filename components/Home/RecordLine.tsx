@@ -1,4 +1,5 @@
 import { format } from "date-fns";
+import { it } from "date-fns/locale";
 import React from "react";
 import { View, Text, Pressable } from "react-native";
 
@@ -54,7 +55,9 @@ export default function RecordLine(props) {
                   marginRight: 17,
                 }}
               >
-                {format(new Date(props.dati.data), "EEEE d")}
+                {format(new Date(props.dati.data), "EEEE d", {
+                  locale: it,
+                })}
               </Text>
             </View>
           </View>

@@ -8,6 +8,7 @@ import { Picker } from "@react-native-picker/picker";
 import { primary } from "./utils/Colors";
 import { Course } from "./Model/Types";
 import Icon from "react-native-vector-icons/Ionicons";
+import { it } from "date-fns/locale";
 
 const AggiungiWorkout = () => {
   const [showPicker, setShowPicker] = useState(false);
@@ -119,7 +120,7 @@ const AggiungiWorkout = () => {
         >
           <Chip size="lg" color={primary} onPress={showDatePicker}>
             <Icon name="calendar" color="white" size={22} />{" "}
-            {format(selectedDate, "EEEE dd MMMM yyyy")}
+            {format(selectedDate, "EEEE dd MMMM yyyy", { locale: it })}
           </Chip>
 
           {showPicker && (

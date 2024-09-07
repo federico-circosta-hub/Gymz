@@ -6,7 +6,6 @@ import {
   StyleSheet,
   FlatList,
   Pressable,
-  ActivityIndicator,
   Image,
 } from "react-native";
 import RecordLine from "./RecordLine";
@@ -18,6 +17,8 @@ import { useMonth } from "../Model/MonthContext";
 import { primary } from "../utils/Colors";
 import HomeStats from "./HomeStats";
 import { Course, Month, Record } from "../Model/Types";
+import LogoLoading from "../LoadingStuff/LogoLoading";
+import { calculateWeekPresence } from "../utils/calculations";
 
 type CourseCount = {
   corso: string;
@@ -41,7 +42,7 @@ const ListaAllenamenti = () => {
   }, [month]);
 
   useEffect(() => {
-    calculateWeekPresence();
+    setWeekPresence(calculateWeekPresence(Records, month));
   }, [Records]);
 
   useEffect(() => {
@@ -71,7 +72,7 @@ const ListaAllenamenti = () => {
     setCourseCounts([]);
     if (req.error || req.documents.length === 0) {
       setLoading(false);
-      calculateWeekPresence();
+      setWeekPresence(calculateWeekPresence(Records, month));
       return;
     }
     const workoutData = req.documents[0][month.value];
@@ -105,44 +106,8 @@ const ListaAllenamenti = () => {
     return resultArray;
   }
 
-  const calculateWeekPresence = () => {
-    const currentDate = new Date();
-    if (month.value === "2023-05" || month.label === "ago") {
-      setWeekPresence(Records.length / 2);
-    } else if (currentDate.toISOString().toString() === month.value) {
-      const monthBeginnigDate = new Date(
-        currentDate.getFullYear(),
-        currentDate.getMonth(),
-        1
-      );
-      const daysDifference = differenceInDays(currentDate, monthBeginnigDate);
-      const weeksDifference = daysDifference < 7 ? 0 : daysDifference / 7;
-      setWeekPresence(
-        weeksDifference > 0 ? Records.length / weeksDifference : Records.length
-      );
-    } else {
-      setWeekPresence(Records.length / 4);
-    }
-  };
-
   if (loading) {
-    return (
-      <View
-        style={{
-          height: "100%",
-          padding: 65,
-          alignItems: "center",
-          justifyContent: "center",
-          gap: 16,
-        }}
-      >
-        <Image
-          source={require("../../assets/GYMZ_logo_splash.png")}
-          style={[{ width: 175, height: 175 }]}
-        />
-        <ActivityIndicator size="large" color={primary} />
-      </View>
-    );
+    return <LogoLoading imgSize={175} />;
   } else {
     return (
       <View style={styles.container}>

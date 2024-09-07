@@ -9,6 +9,14 @@ export default class CommunicationController {
     parameters: object
   ) {
     const url = this.BASE_URL + endpoint;
+    const body = {
+      collection: collection,
+      database: "gymz",
+      dataSource: "MongoCluster",
+      ...parameters,
+    };
+
+    //console.log("Body being sent:", JSON.stringify(body, null, 2));
     let httpResponse = await fetch(url, {
       method: "POST",
       headers: {
@@ -17,22 +25,17 @@ export default class CommunicationController {
         "api-key": apiKey,
       },
 
-      body: JSON.stringify({
-        collection: collection,
-        database: "gymz",
-        dataSource: "MongoCluster",
-        ...parameters,
-      }),
+      body: JSON.stringify(body),
     });
     const status = httpResponse.status;
-    console.log("parameters", parameters);
+    //console.log("httpResponse", httpResponse);
     if (status !== 200) return { error: true };
 
     try {
       let deserializedObject = await httpResponse.json();
       return deserializedObject;
     } catch (err) {
-      console.log(status + " An error occurred");
+      //console.log(status + " An error occurred");
       Alert.alert("Errore di rete\nRiprovare più tardi");
     }
   }

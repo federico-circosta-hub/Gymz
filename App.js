@@ -5,9 +5,9 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import AggiungiWorkout from "./components/AggiungiWorkout";
 import { View, Text, Modal, Pressable } from "react-native";
 import { MonthProvider, useMonth } from "./components/Model/MonthContext";
-import SelectMonth from "./components/SelectMonth";
+import SelectMonth from "./components/MonthSelect/SelectMonth";
 import { Chip } from "@rneui/themed";
-import { primary } from "./components/utils/Colors";
+import { primary, secondary } from "./components/utils/Colors";
 import Icon from "react-native-vector-icons/Ionicons";
 
 const App = () => {
@@ -63,7 +63,7 @@ const AppContent = () => {
                       style={{
                         justifyContent: "center",
                         alignItems: "center",
-                        backgroundColor: "whitesmoke",
+                        backgroundColor: "aliceblue",
                         flex: 6,
                       }}
                     >
@@ -73,7 +73,7 @@ const AppContent = () => {
                       style={{
                         justifyContent: "center",
                         alignItems: "center",
-                        backgroundColor: "whitesmoke",
+                        backgroundColor: "aliceblue",
                         flex: 1,
                       }}
                     >
@@ -82,13 +82,17 @@ const AppContent = () => {
                           style={{
                             width: 48,
                             height: 48,
-                            backgroundColor: "white",
+                            backgroundColor: primary,
                             alignItems: "center",
                             justifyContent: "center",
                             borderRadius: 48,
                           }}
                         >
-                          <Icon name="close-outline" size={32} />
+                          <Icon
+                            name="close-outline"
+                            size={32}
+                            color={"white"}
+                          />
                         </View>
                       </Pressable>
                     </View>
