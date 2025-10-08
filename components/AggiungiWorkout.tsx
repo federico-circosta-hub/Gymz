@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { View, StyleSheet, Image, ActivityIndicator } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import ComunicationController from "./Model/ComunicationController";
+import CommunicationController from "./Model/CommunicationController";
 import { Chip, Button } from "@rneui/themed";
 import { format } from "date-fns";
 import { Picker } from "@react-native-picker/picker";
@@ -23,7 +23,7 @@ const AggiungiWorkout = () => {
 
   const getCourses = async () => {
     const endpoint = "action/find";
-    let req = await ComunicationController.serverReq(endpoint, "courses", {});
+    let req = await CommunicationController.serverReq(endpoint, "courses", {});
     setCourses(req.documents[0].courses);
   };
 
@@ -68,7 +68,7 @@ const AggiungiWorkout = () => {
       },
     };
 
-    const res = await ComunicationController.serverReq(
+    const res = await CommunicationController.serverReq(
       endpoint,
       "workoutMonths",
       o
@@ -76,7 +76,7 @@ const AggiungiWorkout = () => {
     if (res?.modifiedCount === 0) {
       const body = { document: { [currentKey]: [bodyData] } };
       const newEndpoint = "action/insertOne";
-      await ComunicationController.serverReq(
+      await CommunicationController.serverReq(
         newEndpoint,
         "workoutMonths",
         body

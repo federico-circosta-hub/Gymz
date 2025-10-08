@@ -1,4 +1,4 @@
-import CommunicationController from "../ComunicationController";
+import CommunicationController from "../CommunicationController";
 
 export const fetchDateKeys = async (collection: string) => {
   const endpoint = "action/aggregate";

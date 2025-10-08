@@ -9,7 +9,7 @@ import {
   Image,
 } from "react-native";
 import RecordLine from "./RecordLine";
-import ComunicationController from "../Model/ComunicationController";
+import CommunicationController from "../Model/CommunicationController";
 import StatLine from "./StatLine";
 import Detail from "./Detail";
 import { differenceInDays } from "date-fns";
@@ -51,7 +51,7 @@ const ListaAllenamenti = () => {
 
   const getCourses = async (): Promise<void> => {
     const endpoint = "action/find";
-    let req = await ComunicationController.serverReq(endpoint, "courses", {});
+    let req = await CommunicationController.serverReq(endpoint, "courses", {});
     setCourses(req.documents[0].courses);
   };
 
@@ -63,7 +63,7 @@ const ListaAllenamenti = () => {
     const parameters = {
       filter: { [month.value]: { $exists: true } },
     };
-    let req = await ComunicationController.serverReq(
+    let req = await CommunicationController.serverReq(
       endpoint,
       "workoutMonths",
       parameters
