@@ -9,6 +9,7 @@ import { primary } from "./utils/Colors";
 import { Course } from "./Model/Types";
 import Icon from "react-native-vector-icons/Ionicons";
 import { it } from "date-fns/locale";
+import Toast from "react-native-toast-message";
 
 const AggiungiWorkout = () => {
   const [showPicker, setShowPicker] = useState(false);
@@ -73,15 +74,26 @@ const AggiungiWorkout = () => {
       "workoutMonths",
       o
     );
-    if (res?.modifiedCount === 0) {
-      const body = { document: { [currentKey]: [bodyData] } };
-      const newEndpoint = "action/insertOne";
-      await CommunicationController.serverReq(
-        newEndpoint,
-        "workoutMonths",
-        body
-      );
+    if (res.success) {
+      Toast.show({
+        type: "success",
+        text1: "Salvato!",
+        text2: "Il tuo allenamento è stato salvato ✅",
+        position: "bottom",
+        bottomOffset: 175,
+        swipeable: true,
+      });
+    } else {
+      Toast.show({
+        type: "error",
+        text1: "Ops...",
+        text2: "Qualcosa è andato storto 😕",
+        position: "bottom",
+        bottomOffset: 175,
+        swipeable: true,
+      });
     }
+
     clearFormData();
     setIsSaving(false);
   };

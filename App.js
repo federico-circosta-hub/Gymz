@@ -7,14 +7,18 @@ import { View, Text, Modal, Pressable } from "react-native";
 import { MonthProvider, useMonth } from "./components/Model/MonthContext";
 import SelectMonth from "./components/MonthSelect/SelectMonth";
 import { Chip } from "@rneui/themed";
-import { primary, secondary } from "./components/utils/Colors";
+import { primary } from "./components/utils/Colors";
 import Icon from "react-native-vector-icons/Ionicons";
+import Toast from "react-native-toast-message";
 
 const App = () => {
   return (
-    <MonthProvider>
-      <AppContent />
-    </MonthProvider>
+    <>
+      <MonthProvider>
+        <AppContent />
+      </MonthProvider>
+      <Toast />
+    </>
   );
 };
 
