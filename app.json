@@ -3,7 +3,7 @@
     "name": "Gymz",
     "displayName": "Gymz",
     "slug": "Gymz",
-    "version": "3.0",
+    "version": "3.1.0",
     "orientation": "portrait",
     "icon": "./assets/icons/icon.png",
     "userInterfaceStyle": "light",
